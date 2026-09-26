@@ -36,7 +36,7 @@ async function preloadConfig() {
     const KEYS = [
         "OWNERNUMBER", "SUDOLID", "DEVNAME", "OWNERNAME", "CHANNELNAME",
         "OPENCHAT", "INVITE", "CHANNELID", "CHANNEL", "BOTNAME",
-        "IMAGE", "REACT", "EMOJI", "MODE", "STOREWRITEINTERVAL" ];
+        "IMAGE", "REACT", "EMOJI", "MODE", "STOREWRITEINTERVAL" , "SIGNAL"];
     const config = {}; 
     for (const key of KEYS) {
         config[key.toLowerCase()] = await get(key);
@@ -57,13 +57,15 @@ const log = (...args) => {
     log('⚙️ configuration done');  } catch (err) {
     log('🚫 configuration failed:', err); process.exit(1);  } })();
 
+let initialBoot = true;
+
 async function igniteLuna() {
     const config = await preloadConfig();
 
     const {
         botname, react, emoji, invite, openchat,
         channel, channelid, channelname, image,
-        mode, storewriteinterval } = config;
+        mode, storewriteinterval, signal } = config;
     const freechat = process.env.OPENCHAT || openchat
 
     const sessionDir = path.join(__dirname, 'heart');
@@ -163,8 +165,12 @@ async function downloadSessionData() {
                             log('❌ Cannot access openchat metadata', err);
                         }
 
-                    // Send startup message
-                    if (mess?.bloom && mess?.powered) {
+                    // Send startup message only on first boot or if reconnect signal messages are enabled
+                    const shouldSendStartup =
+                        initialBoot ||
+                        (!initialBoot && signal === "true");
+
+                    if (shouldSendStartup && mess?.bloom && mess?.powered) {
                         const payload = {
                             image: { url: image },
                             caption: mess.bloom,
@@ -188,8 +194,11 @@ async function downloadSessionData() {
                         };
 
                         Luna.sendMessage(freechat, payload).catch(err => {
-                            log('Boot message failed:', err?.message || err);  });
+                            log("Boot message failed:", err?.message || err);
+                        });
                     }
+
+                    initialBoot = false;
 
                     await startReminderChecker(Luna);
                     await startStatusWatcher(Luna, log);
