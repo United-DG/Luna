@@ -62,5 +62,11 @@
     "uuid": "^11.1.0",
     "wa-sticker-formatter": "^4.4.4",
     "yt-search": "^2.13.1"
+  },
+  "allowScripts": {
+    "baileys@7.0.0-rc.9": true,
+    "protobufjs@7.6.6": true,
+    "sharp@0.29.3": true,
+    "sharp@0.30.7": true
   }
 }

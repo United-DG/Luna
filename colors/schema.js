@@ -150,8 +150,9 @@ async function connectDB(source = 'Unknown Module') {
         console.log(`✓ ${source}: Connected to MongoDB`);
     } catch (err) {
         console.error(`❌ MongoDB Connection Error in ${source}: ${err.message}`);
-        console.error(err.stack);
-        throw err;
+        process.exit(0);
+       // console.error(err.stack);
+       // throw err;
     }
 }
 
