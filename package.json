@@ -30,7 +30,7 @@
   },
   "author": "FrioNode",
   "license": "ISC",
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@11.9.0",
   "dependencies": {
     "@distube/ytdl-core": "^4.16.10",
     "axios": "^1.9.0",
@@ -56,6 +56,7 @@
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "redis": "^5.10.0",
+    "request-promise": "^4.2.6",
     "sharp": "~0.29.3",
     "stream": "^0.0.3",
     "uuid": "^11.1.0",
