@@ -26,6 +26,7 @@ const express = require('express');
 const isDocker = require('is-docker').default;
 const { emojis, doReact } = require('./colors/react');
 const { mess, initMess } = require('./colors/mess'); const dotenv = require('dotenv');
+const { handleGroupParticipantsUpdate } = require('./colors/welcome');
 const { _autoStartGame } = require('./bloom/base/games');
 dotenv.config(); initMess();
 const session = process.env.SESSION;
@@ -222,6 +223,14 @@ async function downloadSessionData() {
             const processed = new Set();
             const reactionQueue = [];
             let processing = false;
+
+            Luna.ev.on('group-participants.update', async (update) => {
+                try {
+                    await handleGroupParticipantsUpdate(Luna, update);
+                } catch (err) {
+                    log('Welcome handler error:', err?.message || err);
+                }
+            });
 
             async function processReactions() {
                 if (processing) return;

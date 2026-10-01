@@ -1,5 +1,5 @@
 // setup.js
-const { Setting } = require('./schema');
+const { Setting, Settings } = require('./schema');
 const Bot = require('../package.json');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -49,16 +49,40 @@ async function initDefaults() {
 }
 
 // ----- Get a config value -----
-async function get(key) {
+async function get(key, groupId) {
+  const groupFields = { WELCOME: 'welcomeEnabled', MESSAGE: 'welcomeMessage' };
+  const groupField = groupFields[key.toUpperCase()];
+
+  if (groupId && groupField) {
+    const groupSettings = await Settings.findOne({ group: groupId }).lean();
+    const fallback = key.toUpperCase() === 'WELCOME' ? false : '';
+    return String(groupSettings?.[groupField] ?? fallback);
+  }
+
   const doc = await Setting.findById(key).lean();
   if (doc && doc.value != null) return String(doc.value);
   return process.env[key] ? String(process.env[key]) : '';
 }
 
 // ----- Set or update a config value -----
-async function set(key, value) {
+async function set(key, value, groupId) {
   if (value === undefined || value === null) {
     throw new Error(`[Setup] Cannot set key "${key}" to undefined or null`);
+  }
+
+  const groupFields = { WELCOME: 'welcomeEnabled', MESSAGE: 'welcomeMessage' };
+  const groupField = groupFields[key.toUpperCase()];
+
+  if (groupId && groupField) {
+    const storedValue = key.toUpperCase() === 'WELCOME'
+      ? String(value).toLowerCase() === 'true'
+      : String(value);
+    await Settings.findOneAndUpdate(
+      { group: groupId },
+      { $set: { [groupField]: storedValue } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+    return String(storedValue);
   }
 
   await Setting.findByIdAndUpdate(

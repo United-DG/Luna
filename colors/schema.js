@@ -75,6 +75,8 @@ const settingsSchema = new mongoose.Schema({
     group: { type: String, required: true, unique: true },
     antiLink: { type: Boolean, default: false },
     noImage: { type: Boolean, default: false },
+    welcomeEnabled: { type: Boolean, default: false },
+    welcomeMessage: { type: String, default: '' },
     gameEnabled: { type: Boolean, default: true },
     nsfwEnabled: { type: Boolean, default: false },
     commandsEnabled: { type: Boolean, default: true },

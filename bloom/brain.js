@@ -67,9 +67,10 @@ async function loadCommands() {
 
                         const type = typeof data.type === 'string' ? data.type.toLowerCase() : '';
                         const description = typeof data.desc === 'string' ? data.desc : '';
+                        const usage = typeof data.usage === 'string' ? data.usage : '';
                         const cooldown = typeof data.cooldown === 'number' ? data.cooldown : 0;
 
-                        commandRegistry[cmd] = { run: data.run, type, desc: description, cooldown };
+                        commandRegistry[cmd] = { run: data.run, type, desc: description, usage, cooldown };
                         log(`✅ Loaded command: ${cmd} from ${dir}/${file}`);
                     }
                 } catch (err) { log(err);}
