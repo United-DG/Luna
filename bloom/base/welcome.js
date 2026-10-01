@@ -29,7 +29,7 @@ module.exports = {
         type: 'group',
         desc: 'Set this group\'s welcome message',
         usage: 'message <welcome text>',
-        run: async (Bloom, message, fulltext) => {
+        run: async (Bloom, message) => {
             const groupId = message.key.remoteJid;
             if (!groupId.endsWith('@g.us')) {
                 return Bloom.sendMessage(groupId, { text: 'This command can only be used in a group.' });
@@ -37,8 +37,8 @@ module.exports = {
 
             if (!await isGroupAdminContext(Bloom, message)) return;
 
-            const welcomeMessage = fulltext.trim().split(/\s+/).slice(1).join(' ');
-            if (!welcomeMessage) {
+            const welcomeMessage = getRawCommandBody(message, 'message');
+            if (!welcomeMessage.trim()) {
                 return Bloom.sendMessage(groupId, { text: 'Usage: message <welcome text>' });
             }
 
@@ -47,3 +47,18 @@ module.exports = {
         }
     }
 };
+
+function getRawCommandBody(message, commandName) {
+    const text = extractText(message.message);
+    const commandPrefix = new RegExp(`^\\s*!?${commandName}(?:[ \\t]|\\r?\\n|$)`, 'i');
+    return text.replace(commandPrefix, '');
+}
+
+function extractText(content) {
+    if (!content) return '';
+    if (content.conversation) return content.conversation;
+    if (content.extendedTextMessage?.text) return content.extendedTextMessage.text;
+    if (content.ephemeralMessage) return extractText(content.ephemeralMessage.message);
+    if (content.viewOnceMessage) return extractText(content.viewOnceMessage.message);
+    return '';
+}
