@@ -439,8 +439,8 @@ module.exports = {
             },
             cmds: {
                 type: 'group',
-                desc: 'Toggle NSFW commands',
-                usage: 'nsfw on/off',
+                desc: 'Toggle commands on or off',
+                usage: 'cmds on/off',
                 run: async (Bloom, message, fulltext) =>
                 toggleSetting(Bloom, message, fulltext, 'cmds')
             },

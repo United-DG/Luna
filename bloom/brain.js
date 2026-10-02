@@ -363,7 +363,7 @@ async function checkCommandTypeFlags(Luna, message) {
 /* -----------------------------------------------------------
    10. COMMAND LOCK
 ----------------------------------------------------------- */
-async function checkGroupCommandLock(message) {
+async function checkGroupCommandLock(Luna, message) {
     try {
         const groupId = message.key.remoteJid;
         if (!groupId.endsWith('@g.us')) return true;
@@ -374,6 +374,7 @@ async function checkGroupCommandLock(message) {
         if (!settings) return true;
 
         if (!settings.commandsEnabled && command !== 'cmds') {
+            await Luna.sendMessage(groupId, { text: mess.commandsDisabled });
             return false;
         }
 
@@ -417,7 +418,7 @@ async function checkAFK(Luna, message) {
     if (node !== 'production') setupHotReload();
 })();
 /* -----------------------------------------------------------
-   x. HELLPER COMMANDS
+   x. HELPER COMMANDS
 ----------------------------------------------------------- */
 async function getGroupSettings(groupId) {
     const settings = await Settings.findOne({ group: groupId });
