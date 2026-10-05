@@ -81,7 +81,7 @@ function buildMessages() {
     mess.restart_failed = '❌ Restart failed!';
     mess.installing_dependencies = '📦 Installing dependencies...';
     mess.install_failed = '❌ Dependency install failed!';
-    mess.commandsDisabled = `⚠️ Commands are disabled in this group. Use *cmds on* to enable them.`;
+    mess.commandsDisabled = `⚠️ Commands are disabled in this group.\nUse *cmds on* to enable them.`;
     mess.privateMode = `Bot in private mode — do not disturb`;
     mess.blocked = `You will be blocked for violating privacy policy`;
     mess.groupOnly = `Bot set to group-only mode`;

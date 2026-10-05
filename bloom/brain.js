@@ -373,7 +373,7 @@ async function checkGroupCommandLock(Luna, message) {
         const settings = await getGroupSettings(groupId);
         if (!settings) return true;
 
-        if (!settings.commandsEnabled && command !== 'cmds') {
+        if (settings.commandsEnabled === false && command !== 'cmds') {
             await Luna.sendMessage(groupId, { text: mess.commandsDisabled });
             return false;
         }
@@ -421,8 +421,12 @@ async function checkAFK(Luna, message) {
    x. HELPER COMMANDS
 ----------------------------------------------------------- */
 async function getGroupSettings(groupId) {
-    const settings = await Settings.findOne({ group: groupId });
-    return settings || {}; }
+    return Settings.findOneAndUpdate(
+        { group: groupId },
+        { $setOnInsert: { group: groupId } },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+}
 /* -----------------------------------------------------------
    EXPORTS
 ----------------------------------------------------------- */
