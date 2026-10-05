@@ -124,7 +124,7 @@ async function downloadSessionData() {
                     creds: state.creds,
                     keys: makeCacheableSignalKeyStore(
                         state.keys,
-                        pino({ level: "debug" }).child({ level: "fatal" })
+                       pino({ level: "silent" }).child({})
                     )
                 },
                 syncFullHistory: false,
