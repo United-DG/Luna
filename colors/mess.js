@@ -16,7 +16,7 @@ const mess = {};
 
 // Build message object based on current state
 function buildMessages() {
-    mess.about = `_Hi, I am ${state.botname} ${state.emoji}_\n> A WhatsApp multidevice AI written in JavaScript based on Baileys. I was developed by Master ${state.ownername} and LICENSED under ISC licensing policy at ColdNode Labs (Naivasha, Kenya). I am one of the most advanced AI user-bot models with more than 400 features. Check more from my developer on: https://github.com/(${state.devname})\n\n${state.emoji} To open a ticket send: *(ticket)*`;
+    mess.about = `_Hi, I am ${state.botname} ${state.emoji}_\n> A WhatsApp multidevice AI written in JavaScript based on Baileys. I was developed by Master ${state.ownername} and LICENSED under ISC licensing policy at ColdNode Labs (Naivasha, Kenya). I am one of the most advanced AI user-bot models with more than 400 features. Check more from my developer on: https://github.com/${state.devname}\n\n${state.emoji} To open a ticket send: *(ticket)*`;
 
     mess.ticket = `Your ticket has been created successfully.\n_${state.devname} will contact you shortly. Meanwhile check *(menu)*_`;
 
